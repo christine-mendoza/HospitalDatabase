@@ -1,0 +1,56 @@
+CREATE TABLE person(
+	firstName VARCHAR(50),
+	lastName VARCHAR(50) PRIMARY KEY,
+	type VARCHAR(1));
+
+CREATE TABLE doctor (
+	drName VARCHAR(50) PRIMARY KEY REFERENCES person(lastName));
+
+CREATE TABLE patient (
+	patientID INTEGER,
+	firstName VARCHAR(50),
+	lastName VARCHAR(50) PRIMARY KEY REFERENCES person(lastName),
+	primaryDr VARCHAR(50) REFERENCES doctor(drName),
+	admitInstance INTEGER REFERENCES admitInstance(admitID),
+	emergencyContact VARCHAR(50) NOT NULL,
+	emergencyPhone VARCHAR(12) NOT NULL);
+		
+CREATE TABLE room (
+	roomNum INTEGER CHECK(roomNum < 21) PRIMARY KEY,
+	admitInstance INTEGER REFERENCES admitInstance(admitID),
+	patient VACHAR(50) REFERENCES patient(lastName));
+
+CREATE TABLE treatment (
+	treatmentID INTEGER PRIMARY KEY,
+	admitInstance INTEGER,
+	treatmentType NCHAR(1),
+	treatmentName VARCHAR(50),
+	orderedBy VARCHAR(50),
+	performedBy VARCHAR(50),
+	treatmentDate datetime default(current_timestamp),
+	patient VARCHAR(50));
+	
+CREATE TABLE admitInstance (
+	admitID INTEGER PRIMARY KEY,
+	patient VARCHAR(50) REFERENCES patient (lastName),
+	currentDiagnosis VARCHAR(255),
+	diagnosisID INTEGER,
+	admitDate TEXT,
+	admitDoctor VARCHAR(50) REFERENCES doctor(drName),
+	releaseDate datetime default(current_timestamp),
+	roomNum INTEGER CHECK(roomNum < 21),
+	insuranceComp VARCHAR(50) NOT NULL,
+	insurancePolicyNum VARCHAR(30) NOT NULL);
+
+CREATE TABLE drToPatient (
+	iD INTEGER PRIMARY KEY,
+	patient VARCHAR(50),
+	doctor VARCHAR(50),
+	UNIQUE (patient, doctor));
+	
+INSERT INTO room(roomNum)
+   VALUES (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12),(13),(14),(15),(16),(17),(18),(19),(20);
+
+
+
+
